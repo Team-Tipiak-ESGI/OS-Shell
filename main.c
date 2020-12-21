@@ -4,7 +4,8 @@
 #include <unistd.h>
 #include <wait.h>
 
-#define COMMAND_SIZE 60
+#define COMMAND_SIZE 64
+#define PATH_MAX 256
 
 int countCharacters(const char * str, const char character) {
     int count = 0;
@@ -22,7 +23,12 @@ int main(int argc, char **argv) {
 
         // Get command
         char * command = malloc(COMMAND_SIZE);
-        fputs("> ", stdout);
+
+        char cwd[PATH_MAX];
+        getcwd(cwd, sizeof(cwd));
+
+        fputs(cwd, stdout);
+        fputs(" > ", stdout);
         fgets(command, COMMAND_SIZE, stdin);
 
         strtok(command, "\n"); // Remove \n from command
@@ -40,7 +46,6 @@ int main(int argc, char **argv) {
         }
 
         arguments[i] = NULL;
-
 
         // Fork
         pid_t id = fork();
