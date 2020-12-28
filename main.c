@@ -47,6 +47,10 @@ int main(int argc, char **argv) {
 
         arguments[i] = NULL;
 
+        if (strcmp(arguments[0], "exit") == 0) {
+            exit(1);
+        }
+
         // Fork
         pid_t id = fork();
 
@@ -56,12 +60,21 @@ int main(int argc, char **argv) {
             wait(NULL);
         } else if (id == 0) {
             /* Child process */
-            // Exec command
-            int err = execvp(arguments[0], arguments);
 
-            if (err == -1) {
-                perror("Command failed");
-                exit(EXIT_FAILURE);
+            if (strcmp(arguments[0], "cd") == 0) {
+
+                chdir(arguments[1]);
+
+            } else {
+
+                // Exec command
+                int err = execvp(arguments[0], arguments);
+
+                if (err == -1) {
+                    perror("Command failed");
+                    exit(EXIT_FAILURE);
+                }
+
             }
         } else {
             /* Fork creation failed */
