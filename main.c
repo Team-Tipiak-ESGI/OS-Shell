@@ -69,6 +69,9 @@ int main(void) {
         }
     }
 
+    free(command);
+    free(arguments);
+
     return EXIT_SUCCESS;
 }
 
